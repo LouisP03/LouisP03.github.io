@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Louis' Gap Fill
+        </title>
+        <meta charset="UTF-8"> 
+        <link rel="stylesheet" href="stylesheet.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@100&display=swap" rel="stylesheet">    </head>
+    <body>
+        <div class='super-container'>
+            <h1 class="title">Now, try and fill in the gaps!</h1>
+            <h3 class="title">Then, click below to mark your entries.</h3>
+            <h3 class="title"><span style="color: #99ff99;">Green</span> is correct, <span style="color: #ff9999;">red</span> is incorrect, <span style="color:#9999ff;">blue</span> is where the correct answers<br> are given after entering the wrong one too many times.</h3>
+            <div class='mainContainer'>
+                <div id="gapTextContainer">
+                    
+                </div>
+                <button onclick="markWords();" id="markWords">Mark</button>
+                <h2 style="text-align: center;" id="mark">__/__&nbsp&nbsp&nbsp___%&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</h2>
+    
+            </div>
+            <div class='footnote'>
+                <h6 class='footnote-text'>&#8226 Developed by Louis Parkes, first-year student of computer science studying for a BSc at the University of Birmingham, UK &#8226
+                    <br><span style="color: palevioletred; font-weight: bold;">Dedicated to my girlfriend Holly, to help her with her law revision. You'll do amazingly!</span>
+
+                </h6>
+            
+            </div>
+        </div>
+        
+        <script>
+
+            var gapArray = JSON.parse(localStorage.getItem('arrayWithGaps'));
+            var wordsArr = JSON.parse(localStorage.getItem('words'));
+            var maxMarkAttempts = localStorage.getItem('numMarkAttempts');
+            //this will be used alongside the words array when checking if the users entries
+            //are correct.
+            var indexOfEachGap = [];
+            markAttempts = 0;
+            console.log(gapArray.toString());
+            console.log(wordsArr.toString());
+            for (i = 0; i < gapArray.length; i++) {
+                if (gapArray[i] == "") {
+                    indexOfEachGap.push(i);
+                    var x = document.createElement('INPUT');
+                    x.className = "wordEntryBox";
+                    x.setAttribute("type", "text");
+                    x.size = wordsArr[i].length;
+                    document.getElementById('gapTextContainer').appendChild(x);
+                    document.getElementById('gapTextContainer').innerHTML += " ";
+                }
+                 else {
+                    var x = document.createElement('SPAN');
+                    var t = document.createTextNode(wordsArr[i]);
+                    x.appendChild(t);
+                    x.setAttribute("title", i.toString());
+                    document.getElementById('gapTextContainer').appendChild(x);
+                    document.getElementById('gapTextContainer').innerHTML += " ";
+                 }
+            }
+            console.log(indexOfEachGap);
+
+            function reportPercentage(values) {
+                if (values.perc == 100) {
+                    message = "Perfect! Full marks."
+                } else if (values.perc >= 90) {
+                    message = "Almost perfect!";
+                } else if (values.perc >= 75) {
+                    message = "You're almost there! Just keep trying!";
+                } else if (values.perc >= 45) {
+                    message = "You've still got a little way to go, keep trying!";
+                } else if (values.perc >= 15) {
+                    message = "Keep trying, you'll get there!"
+                } else if (values.perc > 0) {
+                    message = "Definitely room for improvement, don't give up!";
+                } else if (values.perc == 0) {
+                    message = "Oh dear... try again!";
+                } else {
+                    message = "Bruh";
+                }
+                document.getElementById('mark').innerHTML = 
+                    `${values.numCorrect}/${values.numTotal}&nbsp&nbsp&nbsp${values.perc}%&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    ${message}`;
+            }
+
+            function markWords() {
+                var counter = 0;
+                var numCorrect = 0;
+                var numTotal = indexOfEachGap.length;
+
+                document.querySelectorAll('input').forEach(element => {
+                    console.log(element.value);
+                    console.log(wordsArr[indexOfEachGap[counter]]);
+
+                    
+
+                    if (element.value.trim().toLowerCase() == wordsArr[indexOfEachGap[counter]].substring(0,element.value.length).toLowerCase()
+                        && element.value.length > 0) {
+                        element.style.backgroundColor = "#99ff99"; // GREEN
+                        element.value = wordsArr[indexOfEachGap[counter]];
+                        numCorrect++;
+                    } else {
+                        if (markAttempts == maxMarkAttempts) {
+                            element.style.backgroundColor = "#9999ff" // BLUE
+                            element.value = wordsArr[indexOfEachGap[counter]];
+                        } else {
+                            element.style.backgroundColor = "#ff9999"; // RED
+                        }
+                    }
+                    counter++;
+                });
+                
+                var obj = {
+                    perc: (numCorrect / numTotal) * 100,
+                    numCorrect: numCorrect,
+                    numTotal: numTotal
+                }
+                reportPercentage(obj);
+
+                if (markAttempts == maxMarkAttempts) {
+                    markAttempts = 0;
+                } else {
+                    markAttempts++;
+                }
+                
+                
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Louis' Gap Fill</title>
+        <meta charset="UTF-8"> 
+        <link rel="stylesheet" href="stylesheet.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@100&display=swap" rel="stylesheet">
+        <!--<script src="script.js"></script>-->
+    </head>
+    <body>
+        <div class='super-container'>
+            <h1 class="title">Here is your text.</h1>
+            <h3 class="title">Please click on the words you wish to hide with a gap.<br>
+            Click done when you are ready to proceed.</h3>
+            
+            <div class='mainContainer'>
+                
+                <div id="textContainer">
+                    <!--<p id="submittedText">SOme text.</p>-->
+                </div>
+                
+                <button onclick="submitWords();" id="submitWords">Done</button>
+                <div class='markAttemptNumberContainer'>
+                    <p style="font-family: 'Mukta', sans-serif; font-size: 14px; display: inline-block;">You will be able to mark your answers after you fill them in. 
+                        Enter the number of mark attempts you would like to make
+                        before the correct answers are given in blue: 
+                    </p>
+                    <input type='text' id='markAttemptNumber' size='7' value='3'></input>
+                </div>
+               
+            </div>
+            <div class='footnote'>
+                <h6 class='footnote-text'>&#8226 Developed by Louis Parkes, first-year student of computer science studying for a BSc at the University of Birmingham, UK &#8226
+                    <br><span style="color: palevioletred; font-weight: bold;">Dedicated to my girlfriend Holly, to help her with her law revision. You'll do amazingly!</span>
+
+                </h6>
+
+            </div>
+        </div>
+        
+     
+    
+        <script>
+            function arrayRemove(arr, value) {
+                return arr.filter(function(e) {
+                    return e != value;
+                });
+            }
+
+            function makeWordValid(wordToCheck) {
+                var lastLetter = wordToCheck.charAt(wordToCheck.length-1);
+                if ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".indexOf(lastLetter) != -1) {
+                    return wordToCheck;
+                } else {
+                    console.log(wordToCheck.substring(0, wordToCheck.length-1));
+                    return makeWordValid(wordToCheck.substring(0, wordToCheck.length-1));
+                }
+            }
+
+            const CHOSEN_BG_COLOR = "yellowgreen";
+            var chosenWords = [];
+            var indexOfChosenWords = [];
+            const theText = localStorage.getItem('text');
+            console.log(theText);
+            const words = theText.trim().split(" ");
+            for (i = 0; i < words.length; i++) {
+                var x = document.createElement("SPAN");
+                var t = document.createTextNode(words[i]);
+                x.appendChild(t);
+                x.setAttribute("title", i.toString());
+                document.getElementById('textContainer').appendChild(x);
+                document.getElementById('textContainer').innerHTML += " ";
+            }
+            //document.getElementById("textContainer").innerHTML = theText;
+
+            document.querySelectorAll('span').forEach(ele => {
+                ele.addEventListener('click', event => {
+                    //console.log(words[parseInt(ele.title)]);
+                    if (ele.style.backgroundColor == CHOSEN_BG_COLOR) {
+                        chosenWords = arrayRemove(chosenWords, words[parseInt(ele.title)]);
+                        indexOfChosenWords = arrayRemove(indexOfChosenWords, parseInt(ele.title));
+                        console.log(chosenWords.toString());
+                        console.log(indexOfChosenWords.toString());
+                        ele.style.backgroundColor = "transparent";
+                    } else {
+                        if (chosenWords.includes(words[parseInt(ele.title)]) == false) {
+                            var word = words[parseInt(ele.title)];
+                            //var lastLetter = word.charAt(word.length-1);
+                            //console.log(word);
+                            //console.log(word.charAt(word.length-1));
+                            /*
+                            var loop = true;
+                            while (loop) {
+                                if (ALLOWED_CHARS.indexOf(word.charAt(word.length-1)) !== -1) {
+                                    chosenWords.push(words[parseInt(ele.title)]);
+                                    loop = false;
+                                } else {
+                                    word = word.substring(0, word.length);
+                                };
+                            }*/
+
+                            //var validWord = makeWordValid(word);
+                            //chosenWords.push(validWord);
+                            //indexOfChosenWords.push(parseInt(ele.title));
+
+                            chosenWords.push(words[parseInt(ele.title)]);
+                            indexOfChosenWords.push(parseInt(ele.title));
+
+                            
+
+                            //if (words[parseInt(ele.title)].charAt(words[parseInt(ele.title)].length-1).indexOf(ALLOWED_CHARS) !== -1) {
+                            //} else {
+                                //chosenWords.push(words[parseInt(ele.title)].substring(0, words[parseInt(ele.title)].length-2));
+                            //};
+                        };
+                        ele.style.backgroundColor = CHOSEN_BG_COLOR;
+                        console.log(chosenWords.toString());
+                        console.log(indexOfChosenWords.toString());
+                    }
+                
+
+                })
+            })
+
+            function getNumberMarkAttempts() {
+                var num = document.getElementById('markAttemptNumber').value;
+                return num;
+            }
+
+            function submitWords() {
+                if (chosenWords.length == 0) {
+                    return;
+                }
+                var arrWithGaps = [];
+                var finalStringWithGaps = "";
+                //chosenWords... ["word", "another",...]
+                console.log(words);
+                console.log(chosenWords);
+                for (x = 0; x < words.length; x++) {
+                    console.log(words[x]);
+                    //var word = makeWordValid(words[x]);
+                    for (y = 0; y < chosenWords.length; y++) {
+                        console.log(chosenWords[y]);
+                        if (words[x] == chosenWords[y]) {
+                            //if (index of words[x] equals indexOfChosenWords[y])
+                            //checks if the index of the word corresponds to the index of the chosen word
+                            //this is needed as a chosen word may appear more than once in a sentence/paragraph
+                            //and I only want to create a gap on the one that is selected
+                            if (x == indexOfChosenWords[y]) {
+                                arrWithGaps[x] = "";
+                            } else {
+                                arrWithGaps[x] = words[x];
+                            }
+                                
+                            //arrWithGaps[x] = " ".repeat(chosenWords[y].length);
+                                
+                            break;
+                        }
+                        else {
+                            arrWithGaps[x] = words[x];
+                        }
+                    }
+                }
+                console.log(arrWithGaps);
+                finalStringWithGaps = arrWithGaps.join(" ");
+                console.log(finalStringWithGaps);
+
+                var numMarkAttempts = getNumberMarkAttempts();
+
+                localStorage.setItem('words', JSON.stringify(words));
+                localStorage.setItem('arrayWithGaps', JSON.stringify(arrWithGaps));
+                localStorage.setItem('numMarkAttempts', numMarkAttempts);
+                window.location.href = "fillGapsPage.html";
+            }
+        </script>
+    </body>
+
+</html>
