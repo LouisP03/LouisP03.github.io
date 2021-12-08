@@ -68,7 +68,7 @@ textarea {
     font-size: 16px;
     padding: 10px;
     transition-duration: 0.3s;
-    white-space: pre-wrap;
+    white-space: pre-line;
 }
 
 #textContainer span {
@@ -97,7 +97,7 @@ textarea {
     font-family: 'Mukta', sans-serif;
     font-size: 16px;
     padding: 10px;
-    white-space: pre-wrap;
+    white-space: pre-line;
 
 }
 
