@@ -14,14 +14,13 @@
         <div class='super-container'>
             <h1 class="title">Now, try and fill in the gaps!</h1>
             <h3 class="title">Then, click below to mark your entries.</h3>
-            <h3 class="title"><span style="color: #99ff99;">Green</span> is correct, <span style="color: #ff9999;">red</span> is incorrect, <span style="color:#9999ff;">blue</span> is where the correct answers<br> are given after entering the wrong one too many times.</h3>
+            <h3 class="title"><span style="color: #99ff99;">Green</span> is correct, <span style="color: #ff9999;">red</span> is incorrect, <span style="color:#9999ff;">blue</span> is where the correct answers<br> are given after entering the wrong one(s) too many times.</h3>
             <div class='mainContainer'>
-                <div id="gapTextContainer">
-                    
-                </div>
+                <div id="gapTextContainer"></div>
                 <button onclick="markWords();" id="markWords">Mark</button>
-                <h2 style="text-align: center;" id="mark">__/__&nbsp&nbsp&nbsp___%&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</h2>
-    
+                <h4 style="text-align: center; font-family: 'Mukta', sans-serif;">Number of mark attempts remaining, before correct answers given (if you've given any incorrect answers): <span id="numRemaining"></span></h4>
+                <h2 style="text-align: center;" id="mark">__/__&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp___%&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</h2>
+                
             </div>
             <div class='footnote'>
                 <h6 class='footnote-text'>&#8226 Developed by Louis Parkes, first-year student of computer science studying for a BSc at the University of Birmingham, UK &#8226
@@ -41,6 +40,9 @@
             //are correct.
             var indexOfEachGap = [];
             markAttempts = 0;
+
+            changeMarksRemaining(markAttempts, maxMarkAttempts);
+
             console.log(gapArray.toString());
             console.log(wordsArr.toString());
             for (i = 0; i < gapArray.length; i++) {
@@ -87,6 +89,12 @@
                     ${message}`;
             }
 
+            flag = false;
+
+            function changeMarksRemaining(current, max) {
+                document.getElementById('numRemaining').innerHTML = `${max-current}`;
+            }
+
             function markWords() {
                 var counter = 0;
                 var numCorrect = 0;
@@ -107,8 +115,13 @@
                         if (markAttempts == maxMarkAttempts) {
                             element.style.backgroundColor = "#9999ff" // BLUE
                             element.value = wordsArr[indexOfEachGap[counter]];
+                            //markAttempts = 0;
+                            //flag = false;
+
                         } else {
                             element.style.backgroundColor = "#ff9999"; // RED
+                            //markAttempts++;
+                            flag = true;
                         }
                     }
                     counter++;
@@ -120,11 +133,17 @@
                     numTotal: numTotal
                 }
                 reportPercentage(obj);
-
+                
                 if (markAttempts == maxMarkAttempts) {
                     markAttempts = 0;
+                    flag = false;
+                    changeMarksRemaining(markAttempts, maxMarkAttempts);
+
                 } else {
-                    markAttempts++;
+                    if (flag == true) {
+                        markAttempts++;
+                    changeMarksRemaining(markAttempts, maxMarkAttempts);
+                    }
                 }
                 
                 
