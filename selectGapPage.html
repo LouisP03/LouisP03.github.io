@@ -63,8 +63,13 @@
             var indexOfChosenWords = [];
             const theText = localStorage.getItem('text');
             console.log(theText);
-            const words = theText.trim().split(" ");
+            var words = theText.trim().replace(/\s+/g, " ");
+            words = theText.trim().split(" ");
             for (i = 0; i < words.length; i++) {
+                if (words[i] == "") {
+                    console.log("HERE!!!!!!!!!!");
+                    words = arrayRemove(words, "");
+                }
                 var x = document.createElement("SPAN");
                 var t = document.createTextNode(words[i]);
                 x.appendChild(t);
@@ -72,6 +77,7 @@
                 document.getElementById('textContainer').appendChild(x);
                 document.getElementById('textContainer').innerHTML += " ";
             }
+            console.log(words);
             //document.getElementById("textContainer").innerHTML = theText;
 
             document.querySelectorAll('span').forEach(ele => {
@@ -138,10 +144,10 @@
                 console.log(words);
                 console.log(chosenWords);
                 for (x = 0; x < words.length; x++) {
-                    console.log(words[x]);
+                    //console.log(words[x]);
                     //var word = makeWordValid(words[x]);
                     for (y = 0; y < chosenWords.length; y++) {
-                        console.log(chosenWords[y]);
+                        //console.log(chosenWords[y]);
                         if (words[x] == chosenWords[y]) {
                             //if (index of words[x] equals indexOfChosenWords[y])
                             //checks if the index of the word corresponds to the index of the chosen word
