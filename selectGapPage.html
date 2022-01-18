@@ -67,7 +67,7 @@
             const theText = localStorage.getItem('text');
             console.log(theText);
             //var words = theText.trim().replace(/\s+/g, " ");
-            var words = theText.trim().split(/\s+/);
+            var words = theText.trim().split(" ");
             var finalWords = theText.trim().replace(/\s+/," ").split(/\s+|\n/);
             for (i = 0; i < words.length; i++) {
                 if (words[i] == "") {
