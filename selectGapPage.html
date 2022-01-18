@@ -66,8 +66,8 @@
             var indexOfChosenWords = [];
             const theText = localStorage.getItem('text');
             console.log(theText);
-            var words = theText.trim().replace(/\s+/g, " ");
-            words = theText.trim().split(" ");
+            //var words = theText.trim().replace(/\s+/g, " ");
+            var words = theText.trim().split(/\s+/);
             for (i = 0; i < words.length; i++) {
                 if (words[i] == "") {
                     console.log("HERE!!!!!!!!!!");
