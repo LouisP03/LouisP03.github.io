@@ -67,7 +67,8 @@
             const theText = localStorage.getItem('text');
             console.log(theText);
             //var words = theText.trim().replace(/\s+/g, " ");
-            var words = theText.trim().replace(/\s+/," ").split(/\s+|\n/);
+            var words = theText.trim().split(/\s+/);
+            var finalWords = theText.trim().replace(/\s+/," ").split(/\s+|\n/);
             for (i = 0; i < words.length; i++) {
                 if (words[i] == "") {
                     console.log("HERE!!!!!!!!!!");
@@ -87,14 +88,14 @@
                 ele.addEventListener('click', event => {
                     //console.log(words[parseInt(ele.title)]);
                     if (ele.style.backgroundColor == CHOSEN_BG_COLOR) {
-                        chosenWords = arrayRemove(chosenWords, words[parseInt(ele.title)]);
+                        chosenWords = arrayRemove(chosenWords, finalWords[parseInt(ele.title)]);
                         indexOfChosenWords = arrayRemove(indexOfChosenWords, parseInt(ele.title));
                         console.log(chosenWords.toString());
                         console.log(indexOfChosenWords.toString());
                         ele.style.backgroundColor = "transparent";
                     } else {
                         if (chosenWords.includes(words[parseInt(ele.title)]) == false) {
-                            var word = words[parseInt(ele.title)];
+                            var word = finalWords[parseInt(ele.title)];
                             //var lastLetter = word.charAt(word.length-1);
                             //console.log(word);
                             //console.log(word.charAt(word.length-1));
@@ -113,7 +114,7 @@
                             //chosenWords.push(validWord);
                             //indexOfChosenWords.push(parseInt(ele.title));
 
-                            chosenWords.push(words[parseInt(ele.title)]);
+                            chosenWords.push(finalWords[parseInt(ele.title)]);
                             indexOfChosenWords.push(parseInt(ele.title));
 
                             
